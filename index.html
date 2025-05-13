@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="favicon-32x32.png" />
+    <title>ñeques vs Gansos: La Gran Batalla - Tower Defense</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #e67e22;
+            --primary-dark: #d35400;
+            --secondary-color: #f5e7d5;
+            --bg-dark: #2a1a0a;
+            --bg-medium: #3d2914;
+            --bg-light: #4a321c;
+            --text-light: #f5e7d5;
+            --text-muted: #d0b49f;
+            --text-dark: #8c7b6b;
+            --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.4);
+            --border-subtle: rgba(230, 126, 34, 0.3);
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+            --transition-slow: 0.5s ease;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: color var(--transition-normal);
+        }
+        
+        /* Header y navegación */
+        header {
+            background-color: rgba(42, 26, 10, 0.95);
+            backdrop-filter: blur(8px);
+            padding: 15px 5%;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-normal);
+            border-bottom: 1px solid var(--border-subtle);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        header.scrolled {
+            padding: 10px 5%;
+            background-color: rgba(42, 26, 10, 0.98);
+        }
+        
+        .logo {
+            height: 60px;
+            transition: height var(--transition-normal);
+        }
+        
+        header.scrolled .logo {
+            height: 45px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            font-weight: 600;
+            font-size: 18px;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width var(--transition-normal);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero section */
+        .hero {
+            height: 100vh;
+            background: url('/placeholder.svg?height=1080&width=1920') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(42,26,10,1) 0%, rgba(42,26,10,0) 50%, rgba(42,26,10,0.8) 100%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 20px;
+            animation: fadeInUp 1.2s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-logo {
+            max-width: 500px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.5));
+            transition: transform var(--transition-slow);
+        }
+        
+        .hero-logo:hover {
+            transform: scale(1.03);
+        }
+        
+        .hero h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            color: var(--text-light);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            color: var(--text-light);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            transition: all var(--transition-normal);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(230, 126, 34, 0.6);
+        }
+        
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition-slow);
+        }
+        
+        .cta-button:hover::after {
+            left: 100%;
+        }
+        
+        /* Sección de información */
+        .section {
+            padding: 120px 5%;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 70px;
+            color: var(--primary-color);
+            position: relative;
+            font-weight: 700;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        .game-info {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 100px;
+        }
+        
+        .game-info:last-child {
+            margin-bottom: 0;
+        }
+        
+        .game-info-text {
+            flex: 1;
+        }
+        
+        .game-info-text h3 {
+            font-size: 32px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .game-info-text p {
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+            color: var(--text-light);
+        }
+        
+        .game-info-text p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .game-info-image {
+            flex: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid rgba(230, 126, 34, 0.2);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+        }
+        
+        .game-info-image:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .game-info-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform var(--transition-slow);
+        }
+        
+        .game-info-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Sección de personajes */
+        .characters {
+            background-color: var(--bg-medium);
+            padding: 120px 5%;
+            border-top: 3px solid var(--border-subtle);
+            border-bottom: 3px solid var(--border-subtle);
+            position: relative;
+        }
+        
+        .characters::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/placeholder.svg?height=200&width=200') repeat;
+            opacity: 0.03;
+            pointer-events: none;
+        }
+        
+        .character-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+        
+        .character-card {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            border: 1px solid rgba(230, 126, 34, 0.2);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .character-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .character-image {
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .character-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(0deg, var(--bg-light), transparent);
+            opacity: 0.7;
+            transition: opacity var(--transition-normal);
+        }
+        
+        .character-card:hover .character-image::after {
+            opacity: 0.4;
+        }
+        
+        .character-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+        
+        .character-card:hover .character-image img {
+            transform: scale(1.1);
+        }
+        
+        .character-info {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .character-info h3 {
+            font-size: 26px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .character-info p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            flex-grow: 1;
+        }
+        
+        .character-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(230, 126, 34, 0.15);
+        }
+        
+        .stat {
+            text-align: center;
+            transition: transform var(--transition-normal);
+        }
+        
+        .character-card:hover .stat {
+            transform: translateY(-5px);
+        }
+        
+        .stat-value {
+            font-size: 26px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .stat-name {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Sección de características */
+        .features {
+            padding: 120px 5%;
+            position: relative;
+        }
+        
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(77, 51, 25, 0.4) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            border: 1px solid rgba(230, 126, 34, 0.2);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .feature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            z-index: -1;
+        }
+        
+        .feature:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            font-size: 54px;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            display: inline-block;
+            transition: transform var(--transition-normal);
+        }
+        
+        .feature:hover .feature-icon {
+            transform: scale(1.2);
+        }
+        
+        .feature h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .feature h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: width var(--transition-normal);
+        }
+        
+        .feature:hover h3::after {
+            width: 70%;
+        }
+        
+        .feature p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-light);
+        }
+        
+        /* Sección de llamada a la acción */
+        .cta-section {
+            text-align: center;
+            padding: 120px 5%;
+            background: url('/placeholder.svg?height=800&width=1920') center/cover no-repeat fixed;
+            position: relative;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, rgba(42,26,10,0.9) 0%, rgba(42,26,10,0.7) 100%);
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: pulse 5s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.03);
+            }
+        }
+        
+        .cta-section h2 {
+            font-size: 46px;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+        }
+        
+        .cta-section p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            color: var(--text-light);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1e1307;
+            padding: 70px 5% 40px;
+            text-align: center;
+            border-top: 3px solid var(--border-subtle);
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/placeholder.svg?height=200&width=200') repeat;
+            opacity: 0.02;
+            pointer-events: none;
+        }
+        
+        .footer-logo {
+            height: 70px;
+            margin-bottom: 40px;
+            transition: transform var(--transition-normal);
+        }
+        
+        .footer-logo:hover {
+            transform: scale(1.1);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .footer-links a {
+            margin: 0 20px 10px;
+            font-size: 16px;
+            transition: color var(--transition-normal), transform var(--transition-normal);
+            color: var(--text-muted);
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--primary-color);
+            transition: width var(--transition-normal);
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background-color: var(--bg-medium);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 12px;
+            transition: all var(--transition-normal);
+            color: var(--text-light);
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(230, 126, 34, 0.1);
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-5px) rotate(10deg);
+            box-shadow: 0 10px 20px rgba(230, 126, 34, 0.3);
+        }
+        
+        .copyright {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-top: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .section, .characters, .features, .cta-section {
+                padding: 100px 5%;
+            }
+            
+            .hero h1 {
+                font-size: 50px;
+            }
+            
+            .section-title, .cta-section h2 {
+                font-size: 38px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .game-info {
+                gap: 40px;
+                margin-bottom: 70px;
+            }
+            
+            .character-cards, .feature-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 4%;
+            }
+            
+            .logo {
+                height: 45px;
+            }
+            
+            nav ul li {
+                margin-left: 15px;
+            }
+            
+            nav ul li a {
+                font-size: 16px;
+            }
+            
+            .hero h1 {
+                font-size: 40px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .section-title {
+                font-size: 32px;
+                margin-bottom: 50px;
+            }
+            
+            .game-info {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .game-info-text h3 {
+                font-size: 28px;
+            }
+            
+            .cta-section h2 {
+                font-size: 36px;
+            }
+            
+            .cta-section p {
+                font-size: 18px;
+            }
+            
+            .section, .characters, .features, .cta-section {
+                padding: 80px 4%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            header {
+                padding: 12px 4%;
+            }
+            
+            .logo {
+                height: 40px;
+            }
+            
+            nav ul li {
+                margin-left: 10px;
+            }
+            
+            nav ul li a {
+                font-size: 14px;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .cta-button {
+                font-size: 16px;
+                padding: 12px 30px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .game-info-text h3 {
+                font-size: 24px;
+            }
+            
+            .character-image {
+                height: 280px;
+            }
+            
+            .section, .characters, .features, .cta-section {
+                padding: 60px 4%;
+            }
+            
+            .footer-links a {
+                margin: 0 10px 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            nav ul li {
+                margin-left: 8px;
+            }
+            
+            nav ul li a {
+                font-size: 13px;
+            }
+            
+            .hero-logo {
+                max-width: 90%;
+            }
+            
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 15px;
+            }
+            
+            .cta-button {
+                font-size: 15px;
+                padding: 10px 25px;
+            }
+            
+            .character-cards, .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Efectos de otoño adicionales */
+        .autumn-leaf {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('/placeholder.svg?height=30&width=30');
+            background-size: cover;
+            z-index: 1;
+            opacity: 0.8;
+            animation: falling 15s linear infinite;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+        }
+        
+        .autumn-leaf:nth-child(odd) {
+            animation-duration: 18s;
+        }
+        
+        .autumn-leaf:nth-child(3n) {
+            animation-duration: 22s;
+            width: 25px;
+            height: 25px;
+        }
+        
+        .autumn-leaf:nth-child(2n) {
+            width: 35px;
+            height: 35px;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translateY(-100px) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            45% {
+                transform: translateY(40vh) rotate(180deg) translateX(50px);
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Estilos específicos para Tower Defense */
+        .tower-defense-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        
+        .tower-card, .enemy-card {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+            border-radius: 12px;
+            overflow: hidden;
+            padding: 30px 25px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(230, 126, 34, 0.2);
+            transition: all var(--transition-normal);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tower-card::before, .enemy-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(230, 126, 34, 0.1), transparent 70%);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            z-index: -1;
+            transform: scale(0.5);
+        }
+        
+        .tower-card:hover, .enemy-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tower-card:hover::before, .enemy-card:hover::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .tower-icon, .enemy-icon {
+            font-size: 46px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: inline-block;
+            transition: transform var(--transition-normal);
+            filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.3));
+        }
+        
+        .tower-card:hover .tower-icon, .enemy-card:hover .enemy-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .tower-card h4, .enemy-card h4 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .tower-card p, .enemy-card p {
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+        
+        .tower-stats, .enemy-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(230, 126, 34, 0.2);
+        }
+        
+        .tower-stat, .enemy-stat {
+            text-align: center;
+            transition: transform var(--transition-normal);
+        }
+        
+        .tower-card:hover .tower-stat, .enemy-card:hover .enemy-stat {
+            transform: translateY(-5px);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Estilos para el selector de idioma */
+        .language-selector {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .language-button {
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+            color: var(--text-light);
+            border: 1px solid rgba(230, 126, 34, 0.4);
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: all var(--transition-normal);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-button:hover {
+            background: linear-gradient(135deg, #5a422c, #3a2a1a);
+            border-color: rgba(230, 126, 34, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .language-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform var(--transition-normal);
+        }
+
+        .language-button:hover img {
+            transform: rotate(10deg);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+            border: 1px solid rgba(230, 126, 34, 0.4);
+            border-radius: 10px;
+            padding: 10px 0;
+            margin-top: 8px;
+            min-width: 160px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            display: none;
+            transform-origin: top right;
+        }
+
+        .language-dropdown.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .language-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .language-option:hover {
+            background-color: rgba(230, 126, 34, 0.2);
+            transform: translateX(5px);
+        }
+
+        .language-option img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform var(--transition-normal);
+        }
+
+        .language-option:hover img {
+            transform: rotate(10deg);
+        }
+
+        .language-option span {
+            color: var(--text-light);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .language-option.active {
+            background-color: rgba(230, 126, 34, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hojas de otoño animadas -->
+    <div class="autumn-leaf" style="left: 5%; animation-delay: 0s;"></div>
+    <div class="autumn-leaf" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="autumn-leaf" style="left: 35%; animation-delay: 5s;"></div>
+    <div class="autumn-leaf" style="left: 50%; animation-delay: 7s;"></div>
+    <div class="autumn-leaf" style="left: 65%; animation-delay: 9s;"></div>
+    <div class="autumn-leaf" style="left: 80%; animation-delay: 3s;"></div>
+    <div class="autumn-leaf" style="left: 95%; animation-delay: 6s;"></div>
+
+    <!-- Header y navegación -->
+    <header id="header">
+        <img src="logo.png" alt="Ñeques vs Gansos Logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#inicio" data-lang="nav-home">Inicio</a></li>
+                <li><a href="#historia" data-lang="nav-story">Historia</a></li>
+                <li><a href="#personajes" data-lang="nav-defenders">Defensores</a></li>
+                <li><a href="#enemigos" data-lang="nav-invaders">Invasores</a></li>
+                <li><a href="#caracteristicas" data-lang="nav-features">Características</a></li>
+                <li><a href="juego.html" class="cta-button" data-lang="nav-play">Jugar</a></li>
+                <li class="language-selector">
+                    <button id="languageButton" class="language-button">
+                        <img src="/placeholder.svg?height=20&width=20" alt="Idioma" id="currentLanguageFlag">
+                        <span id="currentLanguage">Español</span>
+                    </button>
+                    <div id="languageDropdown" class="language-dropdown">
+                        <div class="language-option" data-lang="es">
+                            <img src="/placeholder.svg?height=20&width=20" alt="Español">
+                            <span>Español</span>
+                        </div>
+                        <div class="language-option" data-lang="en">
+                            <img src="/placeholder.svg?height=20&width=20" alt="English">
+                            <span>English</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero section -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <br><br><br><br>
+           <img src="img1.png" alt="Ñeques vs Gansos" class="hero-logo">
+            <h1 data-lang="hero-title">¡Ñeques vs Gansos!</h1>
+            <p data-lang="hero-description">Defiende tu territorio otoñal de las hordas de gansos invasores. Construye, mejora y despliega tus ñeques para proteger el último refugio de aves en el bosque de otoño.</p>
+            <a href="juego.html" class="cta-button" data-lang="hero-cta">Jugar Ahora</a>
+        </div>
+    </section>
+
+    <!-- Sección de información del juego -->
+    <section class="section" id="historia">
+        <h2 class="section-title" data-lang="story-title">La Gran Batalla Otoñal</h2>
+        
+        <div class="game-info">
+            <div class="game-info-text">
+                <h3 data-lang="conflict-title">El Conflicto Ancestral</h3>
+                <p data-lang="conflict-p1">Desde tiempos inmemoriales, los ñeques y los gansos han disputado el control del Gran Lago Ámbar, un paraíso otoñal lleno de recursos. Con la llegada del otoño, los gansos han decidido lanzar su ofensiva final.</p>
+                <p data-lang="conflict-p2">Como líder de los ñeques, deberás organizar tus defensas estratégicamente para repeler las oleadas de gansos invasores que intentan apoderarse de tu territorio.</p>
+            </div>
+            <div class="game-info-image">
+                <img src="b1.png" alt="Paisaje otoñal del Gran Lago Ámbar">
+            </div>
+        </div>
+        
+        <div class="game-info">
+            <div class="game-info-image">
+                <img src="b2.png" alt="Batalla entre ñeques y gansos">
+            </div>
+            <div class="game-info-text">
+                <h3 data-lang="gameplay-title">Tower Defense Estratégico</h3>
+                <p data-lang="gameplay-p1">Posiciona a tus ñeques defensores en puntos estratégicos para detener el avance de los gansos. Cada tipo de ñeque tiene habilidades únicas: algunos disparan semillas a distancia, otros crean barreras de hojas, y los más poderosos pueden invocar tornados de otoño.</p>
+                <p data-lang="gameplay-p2">Recolecta bellotas doradas para mejorar tus defensas y desbloquear nuevos tipos de ñeques. ¿Podrás resistir todas las oleadas de gansos y proteger el Gran Lago Ámbar?</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de personajes (ñeques defensores) -->
+    <section class="characters" id="personajes">
+        <h2 class="section-title" data-lang="defenders-title">Ñeques Defensores</h2>
+        
+        <div class="character-cards">
+            <div class="character-card">
+                <div class="character-image">
+                    <img src="/placeholder.svg?height=500&width=400" alt="Ñeque Albañil">
+                </div>
+                <div class="character-info">
+                    <h3 data-lang="archer-name">Ñeque Albañil</h3>
+                    <p data-lang="archer-description">Un ñeque experto en el tiro con arco que dispara semillas explosivas a gran distancia. Graduado en con honores en la facultad de civil construyo su torre para un proyecto final.</p>
+                    <div class="character-stats">
+                        <div class="stat">
+                            <div class="stat-value">5</div>
+                            <div class="stat-name" data-lang="stat-range">Precio</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">70</div>
+                            <div class="stat-name" data-lang="stat-damage">Daño</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">40</div>
+                            <div class="stat-name" data-lang="stat-speed">Velocidad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="character-card">
+                <div class="character-image">
+                    <img src="/placeholder.svg?height=500&width=400" alt="Catapulta ñeque">
+                </div>
+                <div class="character-info">
+                    <h3 data-lang="tank-name">Catapulta ñeque</h3>
+                    <p data-lang="tank-description">Gran cantidad de daño pero de velocidad lento. Un ñeque misterioso fabrico este artefacto para ayudar a los estudiantes de la Chorrera a nunca llegar tarde, pronto vendra incluido en la matricula </p>
+                    <div class="character-stats">
+                        <div class="stat">
+                            <div class="stat-value">25</div>
+                            <div class="stat-name" data-lang="stat-range">Precio</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">40</div>
+                            <div class="stat-name" data-lang="stat-damage">Daño</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">95</div>
+                            <div class="stat-name" data-lang="stat-defense">Defensa</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="character-card">
+                <div class="character-image">
+                    <img src="/placeholder.svg?height=500&width=400" alt="Ballesta ñeque">
+                </div>
+                <div class="character-info">
+                    <h3 data-lang="mage-name">Ballesta ñeque/h3>
+                    <p data-lang="mage-description">Gran velocidad pero hace poco daño. Guardado en los rincones del edificio 4 los ñeques esperan el momento para usarlo en su rebelion contra el campus universitario.</p>
+                    <div class="character-stats">
+                        <div class="stat">
+                            <div class="stat-value">60</div>
+                            <div class="stat-name" data-lang="stat-range">Precio</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">90</div>
+                            <div class="stat-name" data-lang="stat-area-damage">Daño de área</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">50</div>
+                            <div class="stat-name" data-lang="stat-speed">Velocidad</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de enemigos (Gansos invasores) -->
+    <section class="section" id="enemigos">
+        <h2 class="section-title" data-lang="invaders-title">Gansos Invasores</h2>
+        
+        <div class="character-cards">
+            <div class="character-card">
+                <div class="character-image">
+                    <img src="/placeholder.svg?height=500&width=400" alt="Ganso Explorador">
+                </div>
+                <div class="character-info">
+                    <h3 data-lang="scout-name">Ganso Explorador</h3>
+                    <p data-lang="scout-description">Rápidos y ágiles, estos gansos son los primeros en la línea de ataque. Aunque no son muy resistentes, su velocidad los hace difíciles de interceptar.</p>
+                    <div class="character-stats">
+                        <div class="stat">
+                            <div class="stat-value">30</div>
+                            <div class="stat-name" data-lang="stat-health">Salud</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">90</div>
+                            <div class="stat-name" data-lang="stat-speed">Velocidad</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">20</div>
+                            <div class="stat-name" data-lang="stat-damage">Daño</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="character-card">
+                <div class="character-image">
+                    <img src="/placeholder.svg?height=500&width=400" alt="Ganso Acorazado">
+                </div>
+                <div class="character-info">
+                    <h3 data-lang="armored-name">Ganso Acorazado</h3>
+                    <p data-lang="armored-description">Protegidos por gruesas plumas otoñales, estos gansos pueden absorber gran cantidad de daño. Son lentos pero implacables en su avance.</p>
+                    <div class="character-stats">
+                        <div class="stat">
+                            <div class="stat-value">90</div>
+                            <div class="stat-name" data-lang="stat-health">Salud</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">30</div>
+                            <div class="stat-name" data-lang="stat-speed">Velocidad</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">40</div>
+                            <div class="stat-name" data-lang="stat-damage">Daño</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="character-card">
+                <div class="character-image">
+                    <img src="/placeholder.svg?height=500&width=400" alt="Ganso Chamán">
+                </div>
+                <div class="character-info">
+                    <h3 data-lang="shaman-name">Ganso Chamán</h3>
+                    <p data-lang="shaman-description">Estos gansos místicos pueden curar a sus aliados y crear escudos protectores. Son prioridad en la lista de objetivos si quieres detener el avance enemigo.</p>
+                    <div class="character-stats">
+                        <div class="stat">
+                            <div class="stat-value">50</div>
+                            <div class="stat-name" data-lang="stat-health">Salud</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">40</div>
+                            <div class="stat-name" data-lang="stat-speed">Velocidad</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">80</div>
+                            <div class="stat-name" data-lang="stat-healing">Curación</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de características -->
+    <section class="features" id="caracteristicas">
+        <h2 class="section-title" data-lang="features-title">Características del Juego</h2>
+        
+        <div class="feature-grid">
+            <div class="feature">
+                <div class="feature-icon">🍂</div>
+                <h3 data-lang="feature1-title">Escenarios Otoñales</h3>
+                <p data-lang="feature1-description">Defiende tu territorio en 20 mapas únicos ambientados en paisajes otoñales: bosques de hojas doradas, lagos ámbar, montañas rojizas y más.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🐦</div>
+                <h3 data-lang="feature2-title">12 Tipos de ñeques</h3>
+                <p data-lang="feature2-description">Desbloquea y mejora 12 tipos diferentes de ñeques defensores, cada uno con habilidades únicas y especializaciones contra distintos tipos de gansos.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🦢</div>
+                <h3 data-lang="feature3-title">Oleadas Desafiantes</h3>
+                <p data-lang="feature3-description">Enfrenta 50 oleadas de gansos invasores con patrones de movimiento y habilidades cada vez más complejos. ¡Incluye jefes gansos épicos!</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3 data-lang="feature4-title">Poderes Especiales</h3>
+                <p data-lang="feature4-description">Activa poderes especiales como la Tormenta de Hojas, el Tornado Otoñal o la Lluvia de Bellotas para detener a los gansos en situaciones críticas.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🌳</div>
+                <h3 data-lang="feature5-title">Árbol de Habilidades</h3>
+                <p data-lang="feature5-description">Mejora tus ñeques y desbloquea nuevas habilidades a través de un extenso árbol de talentos. Personaliza tu estrategia defensiva.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🏆</div>
+                <h3 data-lang="feature6-title">Modo Desafío</h3>
+                <p data-lang="feature6-description">Pon a prueba tus habilidades en el modo desafío con oleadas infinitas de gansos. ¡Compite por los primeros puestos en la tabla de clasificación global!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de torres y mejoras -->
+    <section class="section">
+        <h2 class="section-title" data-lang="towers-title">Torres y Mejoras</h2>
+        
+        <div class="tower-defense-grid">
+            <div class="tower-card">
+                <div class="tower-icon">🏹</div>
+                <h4 data-lang="tower1-title">Torre Arquera</h4>
+                <p data-lang="tower1-description">ñeques especializados en ataques a distancia. Disparan semillas a gran velocidad.</p>
+                <div class="tower-stats">
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level1">Nivel 1</div>
+                        <div class="stat-number" data-lang="tower1-level1">10 daño</div>
+                    </div>
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level3">Nivel 3</div>
+                        <div class="stat-number" data-lang="tower1-level3">30 daño</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tower-card">
+                <div class="tower-icon">🛡️</div>
+                <h4 data-lang="tower2-title">Torre Barrera</h4>
+                <p data-lang="tower2-description">ñeques que crean muros de hojas para bloquear el avance de los gansos.</p>
+                <div class="tower-stats">
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level1">Nivel 1</div>
+                        <div class="stat-number" data-lang="tower2-level1">50 salud</div>
+                    </div>
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level3">Nivel 3</div>
+                        <div class="stat-number" data-lang="tower2-level3">200 salud</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tower-card">
+                <div class="tower-icon">🌪️</div>
+                <h4 data-lang="tower3-title">Torre Mágica</h4>
+                <p data-lang="tower3-description">ñeques que lanzan tornados de hojas que dañan a varios gansos a la vez.</p>
+                <div class="tower-stats">
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level1">Nivel 1</div>
+                        <div class="stat-number" data-lang="tower3-level1">15 área</div>
+                    </div>
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level3">Nivel 3</div>
+                        <div class="stat-number" data-lang="tower3-level3">40 área</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tower-card">
+                <div class="tower-icon">❄️</div>
+                <h4 data-lang="tower4-title">Torre Congelante</h4>
+                <p data-lang="tower4-description">ñeques que ralentizan a los gansos con ráfagas de viento frío otoñal.</p>
+                <div class="tower-stats">
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level1">Nivel 1</div>
+                        <div class="stat-number" data-lang="tower4-level1">20% lento</div>
+                    </div>
+                    <div class="tower-stat">
+                        <div class="stat-label" data-lang="level3">Nivel 3</div>
+                        <div class="stat-number" data-lang="tower4-level3">60% lento</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de llamada a la acción -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 data-lang="cta-title">¡Defiende el Gran Lago Ámbar!</h2>
+            <p data-lang="cta-description">Únete a miles de jugadores en la batalla épica entre ñeques y gansos. Despliega tus defensas, mejora tus torres y detén la invasión de gansos antes de que sea demasiado tarde.</p>
+            <a href="juego.html" class="cta-button" data-lang="cta-button">Comenzar Defensa</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <img src="logo.png" alt="ñeques vs Gansos Logo" class="footer-logo">
+        <div class="footer-links">
+            <a href="#" data-lang="footer-about">Sobre Nosotros</a>
+            <a href="#" data-lang="footer-privacy">Política de Privacidad</a>
+            <a href="#" data-lang="footer-terms">Términos de Servicio</a>
+            <a href="#" data-lang="footer-contact">Contacto</a>
+            <a href="#" data-lang="footer-support">Soporte</a>
+        </div>
+        <div class="social-icons">
+            <a href="#" class="social-icon">FB</a>
+            <a href="#" class="social-icon">TW</a>
+            <a href="#" class="social-icon">IG</a>
+            <a href="#" class="social-icon">YT</a>
+            <a href="#" class="social-icon">DC</a>
+        </div>
+        <p class="copyright" data-lang="footer-copyright">© 2025 ñeques vs Gansos. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- JavaScript para el cambio de idioma y efectos -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Objeto con las traducciones
+            const translations = {
+                'es': {
+                    // Navegación
+                    'nav-home': 'Inicio',
+                    'nav-story': 'Historia',
+                    'nav-defenders': 'Defensores',
+                    'nav-invaders': 'Invasores',
+                    'nav-features': 'Características',
+                    'nav-play': 'Jugar',
+                    
+                    // Hero
+                    'hero-title': '¡ñeques vs Gansos!',
+                    'hero-description': 'Defiende tu territorio otoñal de las hordas de gansos invasores. Construye, mejora y despliega tus ñeques para proteger el último refugio de aves en el bosque de otoño.',
+                    'hero-cta': 'Jugar Ahora',
+                    
+                    // Historia
+                    'story-title': 'La Gran Batalla Otoñal',
+                    'conflict-title': 'El Conflicto Ancestral',
+                    'conflict-p1': 'Desde tiempos inmemoriales, los ñeques y los gansos han disputado el control del Gran Lago Ámbar, un paraíso otoñal lleno de recursos. Con la llegada del otoño, los gansos han decidido lanzar su ofensiva final.',
+                    'conflict-p2': 'Como líder de los ñeques, deberás organizar tus defensas estratégicamente para repeler las oleadas de gansos invasores que intentan apoderarse de tu territorio.',
+                    'gameplay-title': 'Tower Defense Estratégico',
+                    'gameplay-p1': 'Posiciona a tus ñeques defensores en puntos estratégicos para detener el avance de los gansos. Cada tipo de ñeque tiene habilidades únicas: algunos disparan semillas a distancia, otros crean barreras de hojas, y los más poderosos pueden invocar tornados de otoño.',
+                    'gameplay-p2': 'Recolecta bellotas doradas para mejorar tus defensas y desbloquear nuevos tipos de ñeques. ¿Podrás resistir todas las oleadas de gansos y proteger el Gran Lago Ámbar?',
+                    
+                    // Defensores
+                    'defenders-title': 'ñeques Defensores',
+                    'archer-name': 'Ñeque Albañil',
+                    'archer-description': 'Un ñeque experto en el tiro con arco que dispara semillas explosivas a gran distancia. Graduado en con honores en la facultad de civil construyo su torre para un proyecto final.',
+                    'tank-name': 'Catapulta ñeque',
+                    'tank-description': 'Gran cantidad de daño pero de velocidad lento. Un ñeque misterioso fabrico este artefacto para ayudar a los estudiantes de la Chorrera a nunca llegar tarde, pronto vendra incluido en la matricula.',
+                    'mage-name': 'Ballesta ñeque',
+                    'mage-description': 'Gran velocidad pero hace poco daño. Guardado en los rincones del edificio 4 los ñeques esperan el momento para usarlo en su rebelion contra el campus universitario',
+                    
+                    // Invasores
+                    'invaders-title': 'Gansos Invasores',
+                    'scout-name': 'Ganso Explorador',
+                    'scout-description': 'Rápidos y ágiles, estos gansos son los primeros en la línea de ataque. Aunque no son muy resistentes, su velocidad los hace difíciles de interceptar.',
+                    'armored-name': 'Ganso Acorazado',
+                    'armored-description': 'Protegidos por gruesas plumas otoñales, estos gansos pueden absorber gran cantidad de daño. Son lentos pero implacables en su avance.',
+                    'shaman-name': 'Ganso Chamán',
+                    'shaman-description': 'Estos gansos místicos pueden curar a sus aliados y crear escudos protectores. Son prioridad en la lista de objetivos si quieres detener el avance enemigo.',
+                    
+                    // Estadísticas
+                    'stat-range': 'Precio',
+                    'stat-damage': 'Daño',
+                    'stat-speed': 'Velocidad',
+                    'stat-defense': 'Defensa',
+                    'stat-area-damage': 'Daño de área',
+                    'stat-health': 'Salud',
+                    'stat-healing': 'Curación',
+                    
+                    // Características
+                    'features-title': 'Características del Juego',
+                    'feature1-title': 'Escenarios Otoñales',
+                    'feature1-description': 'Defiende tu territorio en 20 mapas únicos ambientados en paisajes otoñales: bosques de hojas doradas, lagos ámbar, montañas rojizas y más.',
+                    'feature2-title': '12 Tipos de ñeques',
+                    'feature2-description': 'Desbloquea y mejora 12 tipos diferentes de ñeques defensores, cada uno con habilidades únicas y especializaciones contra distintos tipos de gansos.',
+                    'feature3-title': 'Oleadas Desafiantes',
+                    'feature3-description': 'Enfrenta 50 oleadas de gansos invasores con patrones de movimiento y habilidades cada vez más complejos. ¡Incluye jefes gansos épicos!',
+                    'feature4-title': 'Poderes Especiales',
+                    'feature4-description': 'Activa poderes especiales como la Tormenta de Hojas, el Tornado Otoñal o la Lluvia de Bellotas para detener a los gansos en situaciones críticas.',
+                    'feature5-title': 'Árbol de Habilidades',
+                    'feature5-description': 'Mejora tus ñeques y desbloquea nuevas habilidades a través de un extenso árbol de talentos. Personaliza tu estrategia defensiva.',
+                    'feature6-title': 'Modo Desafío',
+                    'feature6-description': 'Pon a prueba tus habilidades en el modo desafío con oleadas infinitas de gansos. ¡Compite por los primeros puestos en la tabla de clasificación global!',
+                    
+                    // Torres
+                    'towers-title': 'Torres y Mejoras',
+                    'tower1-title': 'Torre Arquera',
+                    'tower1-description': 'ñeques especializados en ataques a distancia. Disparan semillas a gran velocidad.',
+                    'tower2-title': 'Torre Barrera',
+                    'tower2-description': 'ñeques que crean muros de hojas para bloquear el avance de los gansos.',
+                    'tower3-title': 'Torre Mágica',
+                    'tower3-description': 'ñeques que lanzan tornados de hojas que dañan a varios gansos a la vez.',
+                    'tower4-title': 'Torre Congelante',
+                    'tower4-description': 'ñeques que ralentizan a los gansos con ráfagas de viento frío otoñal.',
+                    'level1': 'Nivel 1',
+                    'level3': 'Nivel 3',
+                    'tower1-level1': '10 daño',
+                    'tower1-level3': '30 daño',
+                    'tower2-level1': '50 salud',
+                    'tower2-level3': '200 salud',
+                    'tower3-level1': '15 área',
+                    'tower3-level3': '40 área',
+                    'tower4-level1': '20% lento',
+                    'tower4-level3': '60% lento',
+                    
+                    // CTA
+                    'cta-title': '¡Defiende el Gran Lago Ámbar!',
+                    'cta-description': 'Únete a miles de jugadores en la batalla épica entre ñeques y gansos. Despliega tus defensas, mejora tus torres y detén la invasión de gansos antes de que sea demasiado tarde.',
+                    'cta-button': 'Comenzar Defensa',
+                    
+                    // Footer
+                    'footer-about': 'Sobre Nosotros',
+                    'footer-privacy': 'Política de Privacidad',
+                    'footer-terms': 'Términos de Servicio',
+                    'footer-contact': 'Contacto',
+                    'footer-support': 'Soporte',
+                    'footer-copyright': '© 2025 ñeques vs Gansos. Todos los derechos reservados.'
+                },
+                'en': {
+                    // Navigation
+                    'nav-home': 'Home',
+                    'nav-story': 'Story',
+                    'nav-defenders': 'Defenders',
+                    'nav-invaders': 'Invaders',
+                    'nav-features': 'Features',
+                    'nav-play': 'Play',
+                    
+                    // Hero
+                    'hero-title': 'Parakeets vs Geese!',
+                    'hero-description': 'Defend your autumn territory from the hordes of invading geese. Build, upgrade, and deploy your parakeets to protect the last bird sanctuary in the autumn forest.',
+                    'hero-cta': 'Play Now',
+                    
+                    // Story
+                    'story-title': 'The Great Autumn Battle',
+                    'conflict-title': 'The Ancient Conflict',
+                    'conflict-p1': 'Since time immemorial, parakeets and geese have disputed control of the Great Amber Lake, an autumn paradise full of resources. With the arrival of autumn, the geese have decided to launch their final offensive.',
+                    'conflict-p2': 'As the leader of the parakeets, you must strategically organize your defenses to repel the waves of invading geese trying to take over your territory.',
+                    'gameplay-title': 'Strategic Tower Defense',
+                    'gameplay-p1': 'Position your defender parakeets at strategic points to stop the advance of the geese. Each type of parakeet has unique abilities: some shoot seeds at a distance, others create leaf barriers, and the most powerful can summon autumn tornadoes.',
+                    'gameplay-p2': 'Collect golden acorns to improve your defenses and unlock new types of parakeets. Can you withstand all the waves of geese and protect the Great Amber Lake?',
+                    
+                    // Defenders
+                    'defenders-title': 'Parakeet Defenders',
+                    'archer-name': 'Feather the Archer',
+                    'archer-description': 'An expert parakeet in archery who shoots explosive seeds at great distances. His accuracy is legendary and can detect geese through the autumn mist.',
+                    'tank-name': 'Oak the Defender',
+                    'tank-description': 'A robust parakeet that creates autumn leaf barriers to block the passage of geese. His defenses can absorb a large amount of damage before breaking.',
+                    'mage-name': 'Breeze the Sorceress',
+                    'mage-description': 'A parakeet with magical powers that can summon small tornadoes of autumn leaves. Her attacks affect several geese at once and can temporarily slow them down.',
+                    
+                    // Invaders
+                    'invaders-title': 'Invading Geese',
+                    'scout-name': 'Scout Goose',
+                    'scout-description': 'Fast and agile, these geese are the first in the attack line. Although not very resistant, their speed makes them difficult to intercept.',
+                    'armored-name': 'Armored Goose',
+                    'armored-description': 'Protected by thick autumn feathers, these geese can absorb a large amount of damage. They are slow but relentless in their advance.',
+                    'shaman-name': 'Shaman Goose',
+                    'shaman-description': 'These mystical geese can heal their allies and create protective shields. They are a priority on the target list if you want to stop the enemy advance.',
+                    
+                    // Stats
+                    'stat-range': 'Range',
+                    'stat-damage': 'Damage',
+                    'stat-speed': 'Speed',
+                    'stat-defense': 'Defense',
+                    'stat-area-damage': 'Area Damage',
+                    'stat-health': 'Health',
+                    'stat-healing': 'Healing',
+                    
+                    // Features
+                    'features-title': 'Game Features',
+                    'feature1-title': 'Autumn Scenarios',
+                    'feature1-description': 'Defend your territory in 20 unique maps set in autumn landscapes: golden leaf forests, amber lakes, reddish mountains, and more.',
+                    'feature2-title': '12 Types of Parakeets',
+                    'feature2-description': 'Unlock and upgrade 12 different types of defender parakeets, each with unique abilities and specializations against different types of geese.',
+                    'feature3-title': 'Challenging Waves',
+                    'feature3-description': 'Face 50 waves of invading geese with increasingly complex movement patterns and abilities. Includes epic goose bosses!',
+                    'feature4-title': 'Special Powers',
+                    'feature4-description': 'Activate special powers such as the Leaf Storm, the Autumn Tornado, or the Acorn Rain to stop the geese in critical situations.',
+                    'feature5-title': 'Skill Tree',
+                    'feature5-description': 'Upgrade your parakeets and unlock new abilities through an extensive talent tree. Customize your defensive strategy.',
+                    'feature6-title': 'Challenge Mode',
+                    'feature6-description': 'Test your skills in challenge mode with infinite waves of geese. Compete for the top spots on the global leaderboard!',
+                    
+                    // Towers
+                    'towers-title': 'Towers and Upgrades',
+                    'tower1-title': 'Archer Tower',
+                    'tower1-description': 'Parakeets specialized in ranged attacks. They shoot seeds at high speed.',
+                    'tower2-title': 'Barrier Tower',
+                    'tower2-description': 'Parakeets that create leaf walls to block the advance of geese.',
+                    'tower3-title': 'Magic Tower',
+                    'tower3-description': 'Parakeets that launch leaf tornadoes that damage several geese at once.',
+                    'tower4-title': 'Freezing Tower',
+                    'tower4-description': 'Parakeets that slow down geese with gusts of cold autumn wind.',
+                    'level1': 'Level 1',
+                    'level3': 'Level 3',
+                    'tower1-level1': '10 damage',
+                    'tower1-level3': '30 damage',
+                    'tower2-level1': '50 health',
+                    'tower2-level3': '200 health',
+                    'tower3-level1': '15 area',
+                    'tower3-level3': '40 area',
+                    'tower4-level1': '20% slow',
+                    'tower4-level3': '60% slow',
+                    
+                    // CTA
+                    'cta-title': 'Defend the Great Amber Lake!',
+                    'cta-description': 'Join thousands of players in the epic battle between parakeets and geese. Deploy your defenses, upgrade your towers, and stop the goose invasion before it\'s too late.',
+                    'cta-button': 'Start Defense',
+                    
+                    // Footer
+                    'footer-about': 'About Us',
+                    'footer-privacy': 'Privacy Policy',
+                    'footer-terms': 'Terms of Service',
+                    'footer-contact': 'Contact',
+                    'footer-support': 'Support',
+                    'footer-copyright': '© 2025 Parakeets vs Geese. All rights reserved.'
+                }
+            };
+            
+            // Elementos del selector de idioma
+            const languageButton = document.getElementById('languageButton');
+            const languageDropdown = document.getElementById('languageDropdown');
+            const currentLanguage = document.getElementById('currentLanguage');
+            const currentLanguageFlag = document.getElementById('currentLanguageFlag');
+            const languageOptions = document.querySelectorAll('.language-option');
+            
+            // Obtener el idioma guardado o usar español por defecto
+            let activeLanguage = localStorage.getItem('gameLanguage') || 'es';
+            
+            // Función para cambiar el idioma
+            function changeLanguage(lang) {
+                // Actualizar todos los elementos con atributo data-lang
+                document.querySelectorAll('[data-lang]').forEach(element => {
+                    const key = element.getAttribute('data-lang');
+                    if (translations[lang][key]) {
+                        element.textContent = translations[lang][key];
+                    }
+                });
+                
+                // Actualizar el botón de idioma
+                currentLanguage.textContent = lang === 'es' ? 'Español' : 'English';
+                
+                // Guardar preferencia
+                localStorage.setItem('gameLanguage', lang);
+                activeLanguage = lang;
+                
+                // Actualizar clases activas
+                languageOptions.forEach(option => {
+                    if (option.getAttribute('data-lang') === lang) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                // Cerrar el dropdown
+                languageDropdown.classList.remove('show');
+            }
+            
+            // Aplicar el idioma guardado al cargar
+            changeLanguage(activeLanguage);
+            
+            // Evento para mostrar/ocultar el dropdown
+            languageButton.addEventListener('click', function() {
+                languageDropdown.classList.toggle('show');
+            });
+            
+            // Eventos para las opciones de idioma
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+            
+            // Cerrar el dropdown al hacer clic fuera
+            document.addEventListener('click', function(event) {
+                if (!languageButton.contains(event.target) && !languageDropdown.contains(event.target)) {
+                    languageDropdown.classList.remove('show');
+                }
+            });
+            
+            // Efecto de scroll para el header
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Animación de elementos al hacer scroll
+            const animateOnScroll = function() {
+                const elements = document.querySelectorAll('.game-info, .character-card, .feature');
+                
+                elements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }
+                });
+            };
+            
+            // Inicializar elementos con opacidad 0
+            document.querySelectorAll('.game-info, .character-card, .feature').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Ejecutar animación al cargar y al hacer scroll
+            window.addEventListener('load', animateOnScroll);
+            window.addEventListener('scroll', animateOnScroll);
+            
+            // Añadir más hojas de otoño dinámicamente
+            const addMoreLeaves = function() {
+                const body = document.body;
+                for (let i = 0; i < 10; i++) {
+                    const leaf = document.createElement('div');
+                    leaf.className = 'autumn-leaf';
+                    leaf.style.left = Math.random() * 100 + '%';
+                    leaf.style.animationDelay = Math.random() * 10 + 's';
+                    body.appendChild(leaf);
+                }
+            };
+            
+            // Añadir hojas adicionales
+            addMoreLeaves();
+        });
+    </script>
+</body>
+</html>
