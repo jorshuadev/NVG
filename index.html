@@ -178,7 +178,7 @@
         
         .hero p {
             font-size: 22px;
-            margin-bottom: 40px;
+            margin-bottom: 60px; /* Aumentado de 40px a 60px para dar más espacio */
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
             color: var(--text-light);
             max-width: 700px;
@@ -202,6 +202,7 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
             z-index: 10;
+            margin-bottom: 30px; /* Añadido margen inferior al botón */
         }
         
         .cta-button:hover {
@@ -644,6 +645,7 @@
             
             .hero p {
                 font-size: 18px;
+                margin-bottom: 50px; /* Ajustar espacio para el botón en móviles */
             }
             
             .section-title {
@@ -670,6 +672,18 @@
             
             .section, .characters, .features, .cta-section {
                 padding: 80px 4%;
+            }
+
+            .hero-content {
+                padding-top: 80px; /* Añadir espacio superior en móviles */
+            }
+            
+            .cta-button {
+                margin-bottom: 40px; /* Más espacio en móviles */
+            }
+            
+            .video-container iframe {
+                height: 350px;
             }
         }
         
@@ -701,6 +715,7 @@
             .cta-button {
                 font-size: 16px;
                 padding: 12px 30px;
+                margin-bottom: 30px;
             }
             
             .section-title {
@@ -721,6 +736,14 @@
             
             .footer-links a {
                 margin: 0 10px 10px;
+            }
+
+            .hero-content {
+                padding-top: 60px;
+            }
+            
+            .video-container iframe {
+                height: 250px;
             }
         }
         
@@ -1016,6 +1039,19 @@
             background-color: var(--bg-medium);
             border-top: 3px solid var(--border-subtle);
             border-bottom: 3px solid var(--border-subtle);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 30%, rgba(230, 126, 34, 0.1), transparent 70%);
+            pointer-events: none;
         }
 
         .video-container {
@@ -1026,11 +1062,30 @@
             overflow: hidden;
             border: 2px solid rgba(230, 126, 34, 0.2);
             transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+            position: relative;
+        }
+
+        .video-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 30px rgba(230, 126, 34, 0.3);
+            pointer-events: none;
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity var(--transition-normal);
         }
 
         .video-container:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-container:hover::after {
+            opacity: 1;
         }
 
         @media (max-width: 768px) {
@@ -1065,7 +1120,7 @@
                 <li><a href="#historia" data-lang="nav-story">Historia</a></li>
                 <li><a href="#personajes" data-lang="nav-defenders">Defensores</a></li>
                 <li><a href="#enemigos" data-lang="nav-invaders">Invasores</a></li>
-                <li><a href="#video" data-lang="nav-features">Gameplay</a></li>
+                <li><a href="#video" data-lang="nav-gameplay">Gameplay</a></li>
                 <li><a href="juego.html" class="cta-button" data-lang="nav-play">Jugar</a></li>
                 <li class="language-selector">
                     <button id="languageButton" class="language-button">
@@ -1404,6 +1459,7 @@
                     'nav-invaders': 'Invasores',
                     'nav-features': 'Características',
                     'nav-play': 'Jugar',
+                    'nav-gameplay': 'Gameplay',
                     
                     // Hero
                     'hero-title': '¡ñeques vs Gansos!',
@@ -1503,6 +1559,7 @@
                     'nav-invaders': 'Invaders',
                     'nav-features': 'Features',
                     'nav-play': 'Play',
+                    'nav-gameplay': 'Gameplay',
                     
                     // Hero
                     'hero-title': 'Parakeets vs Geese!',
