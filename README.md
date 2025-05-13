@@ -1,4 +1,4 @@
-# 🐐 Ñeques vs Gansos 🦆
+# 🦫  Ñeques vs Gansos 🦆
 
 **Neques vs Gansos** es un juego indie de estilo **pixel art** y género **tower defense**, donde deberás defender tu territorio de hordas de gansos invasores usando las poderosas habilidades de los valientes neques.
 
