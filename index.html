@@ -864,54 +864,6 @@
         }
       }
 
-      /* Efectos de otoño adicionales */
-      .autumn-leaf {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        background-image: url("/placeholder.svg?height=30&width=30");
-        background-size: cover;
-        z-index: 1;
-        opacity: 0.8;
-        animation: falling 15s linear infinite;
-        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
-      }
-
-      .autumn-leaf:nth-child(odd) {
-        animation-duration: 18s;
-      }
-
-      .autumn-leaf:nth-child(3n) {
-        animation-duration: 22s;
-        width: 25px;
-        height: 25px;
-      }
-
-      .autumn-leaf:nth-child(2n) {
-        width: 35px;
-        height: 35px;
-      }
-
-      @keyframes falling {
-        0% {
-          transform: translateY(-100px) rotate(0deg) translateX(0);
-          opacity: 0;
-        }
-        10% {
-          opacity: 0.8;
-        }
-        45% {
-          transform: translateY(40vh) rotate(180deg) translateX(50px);
-        }
-        90% {
-          opacity: 0.7;
-        }
-        100% {
-          transform: translateY(100vh) rotate(360deg) translateX(100px);
-          opacity: 0;
-        }
-      }
-
       /* Estilos específicos para Tower Defense */
       .tower-defense-grid {
         display: grid;
@@ -1200,6 +1152,91 @@
         opacity: 1;
       }
 
+      /* Estilos para la guía de instalación */
+      .installation-guide {
+        background-color: var(--bg-medium);
+        border-radius: 12px;
+        padding: 30px;
+        margin-top: 40px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid rgba(230, 126, 34, 0.3);
+      }
+
+      .installation-guide h3 {
+        font-size: 24px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .installation-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .installation-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .step-number {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-dark)
+        );
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+        box-shadow: 0 3px 8px rgba(230, 126, 34, 0.4);
+      }
+
+      .step-content {
+        flex: 1;
+      }
+
+      .step-content h4 {
+        font-size: 18px;
+        color: var(--primary-color);
+        margin-bottom: 8px;
+      }
+
+      .step-content p {
+        font-size: 16px;
+        color: var(--text-light);
+        line-height: 1.6;
+      }
+
+      .step-image {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-top: 15px;
+        border: 1px solid rgba(230, 126, 34, 0.2);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .installation-note {
+        background-color: rgba(230, 126, 34, 0.1);
+        border-left: 3px solid var(--primary-color);
+        padding: 15px;
+        margin-top: 25px;
+        border-radius: 0 8px 8px 0;
+      }
+
+      .installation-note p {
+        font-size: 15px;
+        color: var(--text-light);
+        margin: 0;
+      }
+
       @media (max-width: 768px) {
         .video-container iframe {
           height: 350px;
@@ -1214,15 +1251,6 @@
     </style>
   </head>
   <body>
-    <!-- Hojas de otoño animadas -->
-    <div class="autumn-leaf" style="left: 5%; animation-delay: 0s"></div>
-    <div class="autumn-leaf" style="left: 20%; animation-delay: 2s"></div>
-    <div class="autumn-leaf" style="left: 35%; animation-delay: 5s"></div>
-    <div class="autumn-leaf" style="left: 50%; animation-delay: 7s"></div>
-    <div class="autumn-leaf" style="left: 65%; animation-delay: 9s"></div>
-    <div class="autumn-leaf" style="left: 80%; animation-delay: 3s"></div>
-    <div class="autumn-leaf" style="left: 95%; animation-delay: 6s"></div>
-
     <!-- Header y navegación -->
     <header id="header">
       <img src="logo.png" alt="Ñeques vs Gansos Logo" class="logo" />
@@ -1235,6 +1263,9 @@
           </li>
           <li><a href="#enemigos" data-lang="nav-invaders">Invasores</a></li>
           <li><a href="#video" data-lang="nav-gameplay">Gameplay</a></li>
+          <li>
+            <a href="#instalacion" data-lang="nav-install">Instalación</a>
+          </li>
           <li>
             <a
               href="NVG.zip"
@@ -1518,85 +1549,101 @@
       </div>
     </section>
 
-    <!-- Sección de torres y mejoras -->
-    <section class="section">
-      <h2 class="section-title" data-lang="towers-title">Torres y Mejoras</h2>
+    <!-- NUEVA SECCIÓN: Guía de instalación -->
+    <section class="section" id="instalacion">
+      <h2 class="section-title">Guía de Instalación</h2>
 
-      <div class="tower-defense-grid">
-        <div class="tower-card">
-          <div class="tower-icon">🏹</div>
-          <h4 data-lang="tower1-title">Torre Arquera</h4>
-          <p data-lang="tower1-description">
-            ñeques especializados en ataques a distancia. Disparan semillas a
-            gran velocidad.
-          </p>
-          <div class="tower-stats">
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level1">Nivel 1</div>
-              <div class="stat-number" data-lang="tower1-level1">10 daño</div>
+      <div class="installation-guide">
+        <h3>Cómo instalar y ejecutar Ñeques vs Gansos</h3>
+
+        <div class="installation-steps">
+          <div class="installation-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Descargar el archivo ZIP</h4>
+              <p>
+                Haz clic en el botón "Descargar Juego" en la parte superior de
+                esta página para obtener el archivo NVG.zip que contiene el
+                juego completo.
+              </p>
             </div>
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level3">Nivel 3</div>
-              <div class="stat-number" data-lang="tower1-level3">30 daño</div>
+          </div>
+
+          <div class="installation-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Descomprimir el archivo</h4>
+              <p>
+                Una vez descargado, haz clic derecho sobre el archivo NVG.zip y
+                selecciona "Extraer todo..." (Windows) o usa tu programa de
+                descompresión preferido. Selecciona una ubicación donde quieras
+                instalar el juego.
+              </p>
+            </div>
+          </div>
+
+          <div class="installation-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Abrir la carpeta del juego</h4>
+              <p>
+                Navega hasta la carpeta donde extrajiste los archivos. Deberías
+                ver varios archivos, incluyendo "run.bat" (en Windows) o
+                "run.sh" (en Mac/Linux).
+              </p>
+            </div>
+          </div>
+
+          <div class="installation-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Ejecutar el juego</h4>
+              <p>Para iniciar el juego:</p>
+              <ul
+                style="
+                  color: var(--text-light);
+                  margin-left: 20px;
+                  margin-top: 10px;
+                "
+              >
+                <li style="margin-bottom: 8px">
+                  <strong>En Windows:</strong> Haz doble clic en el archivo
+                  "run.bat"
+                </li>
+                <li style="margin-bottom: 8px">
+                  <strong>En Mac/Linux:</strong> Abre una terminal en la carpeta
+                  del juego y ejecuta "chmod +x run.sh" seguido de "./run.sh"
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="installation-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>Configuración inicial</h4>
+              <p>
+                La primera vez que ejecutes el juego, se te pedirá configurar
+                algunas opciones básicas como resolución y nivel de dificultad.
+                Selecciona las opciones que prefieras para comenzar a jugar.
+              </p>
             </div>
           </div>
         </div>
 
-        <div class="tower-card">
-          <div class="tower-icon">🛡️</div>
-          <h4 data-lang="tower2-title">Torre Barrera</h4>
-          <p data-lang="tower2-description">
-            ñeques que crean muros de hojas para bloquear el avance de los
-            gansos.
+        <div class="installation-note">
+          <p>
+            <strong>Nota importante:</strong> Si encuentras algún problema al
+            ejecutar el juego, asegúrate de tener instalados los requisitos
+            mínimos del sistema. El juego requiere Java Runtime Environment
+            (JRE) versión 8 o superior. Si no lo tienes instalado, puedes
+            descargarlo desde
+            <a
+              href="https://www.java.com/download/"
+              style="color: var(--primary-color)"
+              >java.com</a
+            >.
           </p>
-          <div class="tower-stats">
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level1">Nivel 1</div>
-              <div class="stat-number" data-lang="tower2-level1">50 salud</div>
-            </div>
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level3">Nivel 3</div>
-              <div class="stat-number" data-lang="tower2-level3">200 salud</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tower-card">
-          <div class="tower-icon">🌪️</div>
-          <h4 data-lang="tower3-title">Torre Mágica</h4>
-          <p data-lang="tower3-description">
-            ñeques que lanzan tornados de hojas que dañan a varios gansos a la
-            vez.
-          </p>
-          <div class="tower-stats">
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level1">Nivel 1</div>
-              <div class="stat-number" data-lang="tower3-level1">15 área</div>
-            </div>
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level3">Nivel 3</div>
-              <div class="stat-number" data-lang="tower3-level3">40 área</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="tower-card">
-          <div class="tower-icon">❄️</div>
-          <h4 data-lang="tower4-title">Torre Congelante</h4>
-          <p data-lang="tower4-description">
-            ñeques que ralentizan a los gansos con ráfagas de viento frío
-            otoñal.
-          </p>
-          <div class="tower-stats">
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level1">Nivel 1</div>
-              <div class="stat-number" data-lang="tower4-level1">20% lento</div>
-            </div>
-            <div class="tower-stat">
-              <div class="stat-label" data-lang="level3">Nivel 3</div>
-              <div class="stat-number" data-lang="tower4-level3">60% lento</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -1668,6 +1715,7 @@
             "nav-features": "Características",
             "nav-play": "🎮 Jugar",
             "nav-gameplay": "Gameplay",
+            "nav-install": "Instalación",
 
             // Hero
             "hero-title": "¡ñeques vs Gansos!",
@@ -1742,31 +1790,6 @@
             "feature6-description":
               "Pon a prueba tus habilidades en el modo desafío con oleadas infinitas de gansos. ¡Compite por los primeros puestos en la tabla de clasificación global!",
 
-            // Torres
-            "towers-title": "Torres y Mejoras",
-            "tower1-title": "Torre Arquera",
-            "tower1-description":
-              "ñeques especializados en ataques a distancia. Disparan semillas a gran velocidad.",
-            "tower2-title": "Torre Barrera",
-            "tower2-description":
-              "ñeques que crean muros de hojas para bloquear el avance de los gansos.",
-            "tower3-title": "Torre Mágica",
-            "tower3-description":
-              "ñeques que lanzan tornados de hojas que dañan a varios gansos a la vez.",
-            "tower4-title": "Torre Congelante",
-            "tower4-description":
-              "ñeques que ralentizan a los gansos con ráfagas de viento frío otoñal.",
-            level1: "Nivel 1",
-            level3: "Nivel 3",
-            "tower1-level1": "10 daño",
-            "tower1-level3": "30 daño",
-            "tower2-level1": "50 salud",
-            "tower2-level3": "200 salud",
-            "tower3-level1": "15 área",
-            "tower3-level3": "40 área",
-            "tower4-level1": "20% lento",
-            "tower4-level3": "60% lento",
-
             // CTA
             "cta-title": "¡Defiende el Gran Lago Ámbar!",
             "cta-description":
@@ -1791,6 +1814,7 @@
             "nav-features": "Features",
             "nav-play": "🎮 Play",
             "nav-gameplay": "Gameplay",
+            "nav-install": "Installation",
 
             // Hero
             "hero-title": "Parakeets vs Geese!",
@@ -1864,31 +1888,6 @@
             "feature6-title": "Challenge Mode",
             "feature6-description":
               "Test your skills in challenge mode with infinite waves of geese. Compete for the top spots on the global leaderboard!",
-
-            // Towers
-            "towers-title": "Towers and Upgrades",
-            "tower1-title": "Archer Tower",
-            "tower1-description":
-              "Parakeets specialized in ranged attacks. They shoot seeds at high speed.",
-            "tower2-title": "Barrier Tower",
-            "tower2-description":
-              "Parakeets that create leaf walls to block the advance of geese.",
-            "tower3-title": "Magic Tower",
-            "tower3-description":
-              "Parakeets that launch leaf tornadoes that damage several geese at once.",
-            "tower4-title": "Freezing Tower",
-            "tower4-description":
-              "Parakeets that slow down geese with gusts of cold autumn wind.",
-            level1: "Level 1",
-            level3: "Level 3",
-            "tower1-level1": "10 damage",
-            "tower1-level3": "30 damage",
-            "tower2-level1": "50 health",
-            "tower2-level3": "200 health",
-            "tower3-level1": "15 area",
-            "tower3-level3": "40 area",
-            "tower4-level1": "20% slow",
-            "tower4-level3": "60% slow",
 
             // CTA
             "cta-title": "Defend the Great Amber Lake!",
@@ -2015,21 +2014,6 @@
         // Ejecutar animación al cargar y al hacer scroll
         window.addEventListener("load", animateOnScroll);
         window.addEventListener("scroll", animateOnScroll);
-
-        // Añadir más hojas de otoño dinámicamente
-        const addMoreLeaves = function () {
-          const body = document.body;
-          for (let i = 0; i < 10; i++) {
-            const leaf = document.createElement("div");
-            leaf.className = "autumn-leaf";
-            leaf.style.left = Math.random() * 100 + "%";
-            leaf.style.animationDelay = Math.random() * 10 + "s";
-            body.appendChild(leaf);
-          }
-        };
-
-        // Añadir hojas adicionales
-        addMoreLeaves();
       });
     </script>
   </body>
